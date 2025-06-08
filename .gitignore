@@ -11,4 +11,5 @@
 /backend/.env
 /backend/uploads
 
+node_modules
 /uploads

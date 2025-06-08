@@ -19,7 +19,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    getAllProducts: () => ({
+    getAllProducts: builder.query({
       query: () => ({
         url: `${PRODUCTS_URL}/allproducts`,
       }),
@@ -42,10 +42,10 @@ export const productApiSlice = apiSlice.injectEndpoints({
     }),
 
     updateProduct: builder.mutation({
-      query: ({ productId, dataForm }) => ({
+      query: ({ productId, productData }) => ({
         url: `${PRODUCTS_URL}/${productId}`,
         method: "PUT",
-        body: dataForm,
+        body: productData,
       }),
       invalidatesTags: ["Product"],
     }),
