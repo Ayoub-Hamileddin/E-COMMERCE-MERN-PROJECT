@@ -83,7 +83,7 @@ const ProductCarousel = () => {
                         {Math.round(rating)}
                       </h1>
                       <h1 className="flex items-center mb-6 ml-3 w-[9rem]">
-                        <FaStar className="mr-2 text-black" /> Quantity:{" "}
+                        <FaShoppingCart className="mr-2 text-black" /> Quantity:{" "}
                         {quantity}
                       </h1>
                       <h1 className="flex items-center mb-6 ml-3  w-[9rem]">
