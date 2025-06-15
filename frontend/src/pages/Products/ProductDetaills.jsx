@@ -20,6 +20,7 @@ import {
 import moment from "moment";
 import HeartIcon from "./HeartIcon.jsx";
 import Ratings from "./Ratings.jsx";
+import ProductTabs from "./ProductTabs.jsx";
 const ProductDetaills = () => {
   const { id: productId } = useParams();
   const navigate = useNavigate();
@@ -97,8 +98,49 @@ const ProductDetaills = () => {
                   </div>
                 </div>
                 <div className="flex justify-between flex-wrap">
-                  <Ratings value={3.6} text={`${product.numReviews} reviews`} />
+                  <Ratings
+                    value={product.rating}
+                    text={`${product.numReviews} reviews`}
+                  />
+                  {product.countInStock > 0 && (
+                    <div>
+                      <select
+                        value={qty}
+                        onChange={(e) => setQty(e.target.value)}
+                        className="p-2 w-[6rem] rounded-lg text-block"
+                      >
+                        {[...Array(product.countInStock).keys()].map(
+                          (_, index) => (
+                            <option key={index + 1} value={index + 1}>
+                              {index + 1}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                  )}
                 </div>
+                <div className="btn-container">
+                  <button
+                    // onClick={addTocartHandler}
+                    disabled={product.countInStock === 0}
+                    className="bg-pink-500 text-sm font-medium rounded-lg px-4 py-2 mt-4  hover:bg-pink-600 "
+                  >
+                    Add To Cart
+                  </button>
+                </div>
+              </div>
+              <div className=" mt-[5rem] container ml-[10rem] flex flex-wrap justify-between items-start   ">
+                <ProductTabs
+                  userInfo={userInfo}
+                  loadingProductReview={loadingProductReview}
+                  // SubmitHandler={SubmitHandler}
+                  rating={rating}
+                  setRating={setRating}
+                  comment={comment}
+                  setComment={setComment}
+                  product={product}
+                />
               </div>
             </div>
           </>
