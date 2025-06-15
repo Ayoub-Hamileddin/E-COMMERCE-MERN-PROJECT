@@ -27,9 +27,6 @@ const Navigation = () => {
   const ToggleSidebar = () => {
     setDropDownOpen(!showSidebar);
   };
-  const closeSidebar = () => {
-    setShowSidebar(false);
-  };
 
   const [logoutApiCall] = useLogoutMutation();
   const logoutHandler = async () => {
