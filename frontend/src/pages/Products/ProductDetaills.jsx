@@ -37,6 +37,23 @@ const ProductDetaills = () => {
   const [createReview, { isLoading: loadingProductReview }] =
     useCreateReviewMutation();
 
+  const SubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = createReview({ productId, comment, rating }).unwrap();
+      if (res) {
+        toast.success("review added succesfuly");
+        refetch();
+      } else {
+        toast.error("review did not added");
+      }
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
+  console.log(product);
+
   return (
     <>
       <div>
@@ -124,17 +141,17 @@ const ProductDetaills = () => {
                   <button
                     // onClick={addTocartHandler}
                     disabled={product.countInStock === 0}
-                    className="bg-pink-500 text-sm font-medium rounded-lg px-4 py-2 mt-4  hover:bg-pink-600 "
+                    className="bg-pink-500 text-sm font-bold rounded-lg px-4 py-2 mt-4  hover:bg-pink-600 text-white  "
                   >
                     Add To Cart
                   </button>
                 </div>
               </div>
-              <div className=" mt-[5rem] container ml-[10rem] flex flex-wrap justify-between items-start   ">
+              <div className=" mt-[3rem] container ml-[10rem] flex flex-wrap justify-between items-start   ">
                 <ProductTabs
                   userInfo={userInfo}
                   loadingProductReview={loadingProductReview}
-                  // SubmitHandler={SubmitHandler}
+                  SubmitHandler={SubmitHandler}
                   rating={rating}
                   setRating={setRating}
                   comment={comment}
