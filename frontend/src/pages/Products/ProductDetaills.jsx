@@ -40,19 +40,14 @@ const ProductDetaills = () => {
   const SubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = createReview({ productId, comment, rating }).unwrap();
-      if (res) {
-        toast.success("review added succesfuly");
-        refetch();
-      } else {
-        toast.error("review did not added");
-      }
+      await createReview({ productId, comment, rating }).unwrap();
+      refetch();
+      toast.success("review added succesfuly");
     } catch (error) {
       console.log(error.message);
-      toast.error(error.message);
+      toast.error(error.data);
     }
   };
-  console.log(product);
 
   return (
     <>
