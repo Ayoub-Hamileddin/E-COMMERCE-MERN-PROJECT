@@ -19,9 +19,10 @@ import CategoryList from "./pages/admin/CategoryList.jsx";
 import ProductList from "./pages/admin/ProductList.jsx";
 import UpdateProduct from "./pages/admin/UpdateProduct.jsx";
 import AllProductList from "./pages/admin/AllProductList.jsx";
-import Home from "./Home.jsx";
 import Favorites from "./pages/Products/Favorites.jsx";
 import ProductDetaills from "./pages/Products/ProductDetaills.jsx";
+import Home from "./pages/Home.jsx";
+import Cart from "./pages/Cart.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,6 +32,7 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<Home />} />
       <Route path="/favorite" element={<Favorites />} />
       <Route path="/product/:id" element={<ProductDetaills />} />
+      <Route path="/cart" element={<Cart />} />
 
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
