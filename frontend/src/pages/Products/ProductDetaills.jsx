@@ -21,7 +21,9 @@ import moment from "moment";
 import HeartIcon from "./HeartIcon.jsx";
 import Ratings from "./Ratings.jsx";
 import ProductTabs from "./ProductTabs.jsx";
+import { addToCart } from "../../redux/features/cart/cartSlice.js";
 const ProductDetaills = () => {
+  const dispatach = useDispatch();
   const { id: productId } = useParams();
   const navigate = useNavigate();
   const [qty, setQty] = useState(1);
@@ -47,6 +49,11 @@ const ProductDetaills = () => {
       console.log(error.message);
       toast.error(error.data);
     }
+  };
+
+  const addTocartHandler = () => {
+    dispatach(addToCart({ ...product, qty }));
+    navigate("/cart");
   };
 
   return (
@@ -134,7 +141,7 @@ const ProductDetaills = () => {
                 </div>
                 <div className="btn-container">
                   <button
-                    // onClick={addTocartHandler}
+                    onClick={addTocartHandler}
                     disabled={product.countInStock === 0}
                     className="bg-pink-500 text-sm font-bold rounded-lg px-4 py-2 mt-4  hover:bg-pink-600 text-white  "
                   >

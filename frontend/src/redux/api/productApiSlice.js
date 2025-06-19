@@ -89,6 +89,13 @@ export const productApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
       providesTags: ["Product"],
     }),
+    filterProducts: builder.mutation({
+      query: (checked, radio) => ({
+        url: `${PRODUCTS_URL}/filtred-products`,
+        method: "POST",
+        body: { checked, radio },
+      }),
+    }),
   }),
 });
 
@@ -104,4 +111,5 @@ export const {
   useGetTopProductsQuery,
   useGetNewProductsQuery,
   useUploadImageMutation,
+  useFilterProductsMutation,
 } = productApiSlice;
