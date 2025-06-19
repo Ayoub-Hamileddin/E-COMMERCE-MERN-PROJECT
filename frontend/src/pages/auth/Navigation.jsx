@@ -15,6 +15,7 @@ import { logout } from "../../redux/features/auth/authSlice";
 import "./Navigation.css";
 import FavoritesCount from "../Products/FavoritesCount";
 const Navigation = () => {
+  const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -68,6 +69,15 @@ const Navigation = () => {
         >
           <AiOutlineShoppingCart className="mr-2 mt-[3rem] " size={26} />
           <span className="hidden nav-item-name mt-[3rem] ">CART</span>
+          {cartItems.length > 0 && (
+            <div className="absolute top-9">
+              <span>
+                <span className="px-2 bg-pink-500 text-sm rounded-full py-0   ">
+                  {cartItems.reduce((acc, item) => acc + item.qty, 0)}
+                </span>
+              </span>
+            </div>
+          )}
         </Link>
         <Link
           className="flex items-center transition-transform transform hover:translate-x-2"
