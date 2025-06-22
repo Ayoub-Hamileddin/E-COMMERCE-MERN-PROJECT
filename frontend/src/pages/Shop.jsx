@@ -47,8 +47,8 @@ const Shop = () => {
   const handleCheck = (value, id) => {
     const updateChecked = value
       ? [...checked, id]
-      : checked.data?.filter((c) => c !== id);
-    dispatch(setProducts(updateChecked));
+      : checked.filter((c) => c !== id);
+    dispatch(setChecked(updateChecked));
   };
   const uniqueBrands = [
     ...Array.from(
