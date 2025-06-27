@@ -8,15 +8,21 @@ function calcPrices(orderItems) {
     0
   );
 
-  const shippingPrice = itemsPrice > 100 ? 100 : 0;
+  const shippingPrice = itemsPrice >= 100 ? 0 : 10;
   const taxRate = 0.15;
   const taxPrice = (itemsPrice * taxRate).toFixed(2);
-  const totalPrice = itemsPrice + taxPrice + parseFloat(taxPrice).toFixed(2);
+  const totalPrice = (
+    itemsPrice +
+    shippingPrice +
+    parseFloat(taxPrice)
+  ).toFixed(2);
+  console.log("total", typeof totalPrice);
+
   return {
     itemsPrice: itemsPrice.toFixed(2),
     shippingPrice: shippingPrice.toFixed(2),
     taxPrice,
-    totalPrice,
+    totalPrice: parseFloat(totalPrice),
   };
 }
 
@@ -45,6 +51,7 @@ const createOrder = asyncHandler(async (req, res) => {
         _id: undefined,
       };
     });
+    console.log("🧾 dbOrderItems:", dbOrderItems);
     const { totalPrice, taxPrice, shippingPrice, itemsPrice } =
       calcPrices(dbOrderItems);
     const order = new Order({
@@ -63,5 +70,44 @@ const createOrder = asyncHandler(async (req, res) => {
     console.log(error.message);
   }
 });
+const getAllorders = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find({}).populate("user", "id username");
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 
-export { createOrder };
+const getUserOrders = asyncHandler(async (req, res) => {
+  try {
+    const userOrders = await Order.find({ user: req.user._id });
+    res.json(userOrders);
+  } catch (error) {
+    res.status(500).josn(error);
+  }
+});
+const countTotalOrders = asyncHandler(async (req, res) => {
+  try {
+    const count = await Order.countDocuments();
+    res.json(count);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+const calculateTotalSales = asyncHandler(async (req, res) => {
+  try {
+    const orders = await Order.find({});
+    const totalSales = orders.reduce((sum, order) => sum + order.totalPrice, 0);
+    res.json(totalSales);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+export {
+  createOrder,
+  getAllorders,
+  getUserOrders,
+  countTotalOrders,
+  calculateTotalSales,
+};
