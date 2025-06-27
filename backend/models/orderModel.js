@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
 const orderSchema = mongoose.Schema(
-
-  
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -52,6 +50,10 @@ const orderSchema = mongoose.Schema(
       type: Number,
       required: true,
       default: 0.0,
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
     },
     isPaid: {
       type: Boolean,
