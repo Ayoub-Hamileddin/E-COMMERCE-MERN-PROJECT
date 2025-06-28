@@ -104,10 +104,49 @@ const calculateTotalSales = asyncHandler(async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+const calculateTotalSalesByDate = asyncHandler(async (req, res) => {
+  try {
+    const salesByDate = await Order.aggregate([
+      {
+        $match: {
+          isPaid: true,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$paidAt" },
+          },
+          totalSales: { $sum: "$totalPrice" },
+        },
+      },
+    ]);
+    res.json(salesByDate);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+const findOrderById = asyncHandler(async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id).populate(
+      "user",
+      "username email"
+    );
+    if (order) {
+      res.json(order);
+    } else {
+      throw new Error("the order not found");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 export {
   createOrder,
   getAllorders,
   getUserOrders,
   countTotalOrders,
   calculateTotalSales,
+  calculateTotalSalesByDate,
+  findOrderById,
 };
