@@ -20,6 +20,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// PAYPAL CLIENT
+
+app.get("/api/config/paypal", (req, res) => {
+  res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
+});
+
 app.use("/api/users", usersRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/products", productRoutes);
