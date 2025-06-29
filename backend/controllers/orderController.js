@@ -141,6 +141,44 @@ const findOrderById = asyncHandler(async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+const markOrderAsPaid = asyncHandler(async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      order.payemntResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_adress: req.body.email_adress,
+      };
+      const updateOrder = await order.save();
+      res.json(updateOrder);
+    } else {
+      res.status(404);
+      throw new Error("Order not Found");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+const markOrderAsDelivered = asyncHandler(async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      order.isDelivred = true;
+      order.deliveredAt = Date.now();
+      const updateOrder = await order.save();
+      res.json(updateOrder);
+    } else {
+      res.status(404);
+      throw new Error("order Not Found");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 export {
   createOrder,
   getAllorders,
@@ -149,4 +187,6 @@ export {
   calculateTotalSales,
   calculateTotalSalesByDate,
   findOrderById,
+  markOrderAsPaid,
+  markOrderAsDelivered,
 };
