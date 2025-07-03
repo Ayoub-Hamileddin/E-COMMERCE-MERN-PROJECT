@@ -9,6 +9,7 @@ import {
 import ProgressSteps from "../../components/ProgressSteps.jsx";
 
 const Shipping = () => {
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
   const navigate = useNavigate();
@@ -25,11 +26,18 @@ const Shipping = () => {
       navigate("/shipping");
     }
   }, [navigate, shippingAddress]);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(saveShippingAddress({ city, adress, postalCode, country }));
+    dispatch(savePaymentMethod(paymentMethod));
+    navigate("/placeorder");
+  };
   return (
     <div className="container mx-auto mt-10">
       <ProgressSteps step1 step2 />
       <div className="mt-[10rem] flex justify-around items-center flex-wrap">
-        <form className="w-[40rem]">
+        <form onSubmit={submitHandler} className="w-[40rem]">
           <h1 className="text-2xl font-serif font-semibold mb-4">Shipping :</h1>
           <div className="mb-4">
             <label className="block text-white mb-2">Address</label>
@@ -61,7 +69,7 @@ const Shipping = () => {
               onChange={(e) => setPostalCode(e.target.value)}
               required
               className="w-full p-2 border rounded"
-              placeholder="Enter address"
+              placeholder="Enter code Postal"
             />
           </div>
           <div className="mb-4">
@@ -72,7 +80,7 @@ const Shipping = () => {
               onChange={(e) => setCountry(e.target.value)}
               required
               className="w-full p-2 border rounded"
-              placeholder="Enter address"
+              placeholder="Enter country"
             />
           </div>
           <div className="mb-4">
