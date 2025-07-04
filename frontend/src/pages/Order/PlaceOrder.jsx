@@ -7,7 +7,7 @@ import Loader from "../../components/Loader.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { useCreateOrderMutation } from "../../redux/api/orderApiSlice.js";
 import { toast } from "react-toastify";
-import { claerCartItems } from "../../redux/features/cart/cartSlice.js";
+import { clearCartItems } from "../../redux/features/cart/cartSlice.js";
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
@@ -15,11 +15,30 @@ const PlaceOrder = () => {
   const cart = useSelector((state) => state.cart);
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
+  const placeOrderHandler = async () => {
+    try {
+      const res = await createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      }).unwrap();
+      console.log("im here");
+      dispatch(clearCartItems());
+      console.log("dipatch");
+      navigate(`/order/${res._id}`);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
   useEffect(() => {
     if (!cart.shippingAddress.adress) {
       navigate("/shipping");
     }
-  }, [cart.payementMethod, cart.shippingAddress.adress, navigate]);
+  }, [cart.paymentMethod, cart.shippingAddress.adress, navigate]);
   return (
     <>
       <ProgressSteps step1 step2 step3 />
@@ -54,7 +73,7 @@ const PlaceOrder = () => {
                     <td className="p-2">{item.quantity}</td>
                     <td className="p-2">{item.price}</td>
 
-                    <td>{(item.quantity * item.price).toFixed(2)}</td>
+                    <td>{(item.quantity * item.price).toFixed(2)}DH</td>
                   </tr>
                 ))}
               </tbody>
@@ -82,9 +101,7 @@ const PlaceOrder = () => {
                 {cart.totalPrice}
               </li>
             </ul>
-            {error && (
-              <Message variant={"danger"}>{error.data.message}</Message>
-            )}
+            {error && <Message variant={"danger"}>{error}</Message>}
             <div>
               <h2 className="text-2xl font-semibold mb-4">Shipping</h2>
               <p>
@@ -102,9 +119,9 @@ const PlaceOrder = () => {
           </div>
           <button
             type="button"
-            className="bg-pink-500 text-white py-2 px-4 rounded-full text-lg w-full mt-4"
-            disabled={cart.cartItems === 0}
-            // onClick={placeOrderHandler}
+            className="bg-pink-500 text-white py-2 px-4 rounded-full text-lg w-[60%] mt-4 ml-[5rem] "
+            disabled={cart.cartItems.length === 0}
+            onClick={placeOrderHandler}
           >
             Place Order
           </button>
