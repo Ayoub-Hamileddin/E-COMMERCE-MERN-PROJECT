@@ -16,7 +16,7 @@ const Shipping = () => {
   const [paymentMethod, setPaymentMethod] = useState("PayPal");
   const [city, setCity] = useState(shippingAddress.city || "");
   const [adress, setAdress] = useState(shippingAddress.adress || "");
-  const [postalCode, setPostalCode] = useState(
+  const [codePostal, setCodePostal] = useState(
     shippingAddress.postalCode || ""
   );
   const [country, setCountry] = useState(shippingAddress.country || "");
@@ -29,7 +29,7 @@ const Shipping = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({ city, adress, postalCode, country }));
+    dispatch(saveShippingAddress({ city, adress, codePostal, country }));
     dispatch(savePaymentMethod(paymentMethod));
     navigate("/placeorder");
   };
@@ -65,8 +65,8 @@ const Shipping = () => {
             <label className="block text-white mb-2">PostalCode</label>
             <input
               type="text"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
+              value={codePostal}
+              onChange={(e) => setCodePostal(e.target.value)}
               required
               className="w-full p-2 border rounded"
               placeholder="Enter code Postal"
